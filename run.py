@@ -6,6 +6,8 @@ import re
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 import time
+from gevent.pywsgi import WSGIServer
+
 
 app = Flask(__name__)
 
@@ -121,4 +123,6 @@ def download_pdf():
         abort(404)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    # app.run()
+    http_server = WSGIServer(('', 5000), app)
+    http_server.serve_forever()
