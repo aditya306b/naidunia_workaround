@@ -123,6 +123,17 @@ def download_pdf():
         abort(404)
 
 if __name__ == '__main__':
-    # app.run()
-    http_server = WSGIServer(('', 5000), app)
-    http_server.serve_forever()
+    from gunicorn.app.base import Application
+
+    def run():
+        config = {  # Optional configuration from gunicorn_config.py (if used)
+            'bind': "0.0.0.0:5000",
+            'workers': 1,
+            'timeout': 180,
+        }
+
+        app = Application(**config)
+        app.wsgi_app = app.app.wsgi_app  # Set WSGI app for Gunicorn
+        app.run()
+
+    run()
