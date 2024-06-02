@@ -3,3 +3,5 @@ flask
 bs4
 pillow
 reportlab
+python3-gevent
+gevent
