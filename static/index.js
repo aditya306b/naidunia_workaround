@@ -23,7 +23,9 @@ document.getElementById('eventForm').addEventListener('submit', function(event) 
         },
         body: JSON.stringify(data)
     })
-    .then(response => response.json())
+    .then(response => {
+        console.log(response);
+        response.json()})
     .then(data => {
         console.log(data, typeof data);
         document.getElementById('output').textContent = data.message;
