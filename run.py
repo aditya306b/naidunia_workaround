@@ -7,6 +7,7 @@ from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 import time
 from gevent.pywsgi import WSGIServer
+import logging as log
 
 
 app = Flask(__name__)
@@ -21,11 +22,11 @@ def download_image(url, filename):
             for chunk in response.iter_content(1024):
                 f.write(chunk)
             
-        print(f"Image downloaded: {filename}")
+        log.debug(f"Image downloaded: {filename}")
     else:
-      print(f"Failed to download image: {url} - Status code: {response.status_code}")
+      log.error(f"Failed to download image: {url} - Status code: {response.status_code}")
   except Exception as e:
-    print(f"Error downloading image: {url} - {e}")
+    log.error(f"Error downloading image: {url} - {e}")
 
 def scrape_images(output_dir, date, day, city_id):
     all_file = []
@@ -41,16 +42,15 @@ def scrape_images(output_dir, date, day, city_id):
             soup = BeautifulSoup(response.content, 'html.parser')
             images = soup.find_all('img', attrs={'data-src': True})
             os.makedirs(output_dir, exist_ok=True)
+            log.debug(f"Image downloaded: {images}")
+
         else:
             raise Exception("Unable to generate presentation!")
         
     except Exception as err:
-        print(f"PAGE NO - {no} | NOT FOUND")
-        print(err)
+        log.error(f"PAGE NO - {no} | NOT FOUND")
+        log.error(err)
 
-
-    # Extract image URLs and download images
-    
     for image in images:
         image_url = image.get('data-src')
         filename = os.path.join(output_dir, os.path.basename(image_url))
