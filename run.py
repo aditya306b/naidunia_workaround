@@ -12,7 +12,7 @@ import signal
 
 app = Flask(__name__)
 
-TIMEOUT = 180  # seconds
+TIMEOUT = 540  # seconds
 
 def download_image(url, filename, timeout=TIMEOUT):
     """Downloads an image from the specified URL and saves it with the given filename."""
