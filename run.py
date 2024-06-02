@@ -5,10 +5,8 @@ import os
 import re
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
-import time
 from gevent.pywsgi import WSGIServer
 import logging as log
-import signal
 
 app = Flask(__name__)
 
@@ -112,18 +110,6 @@ def download_pdf():
     except FileNotFoundError:
         abort(404)
 
-def timeout_handler(signum, frame):
-    raise TimeoutError("Request timed out")
-
-@app.before_request
-def before_request():
-    signal.signal(signal.SIGALRM, timeout_handler)
-    signal.alarm(TIMEOUT)
-
-@app.after_request
-def after_request(response):
-    signal.alarm(0)
-    return response
 
 if __name__ == '__main__':
     http_server = WSGIServer(('', 5000), app)
