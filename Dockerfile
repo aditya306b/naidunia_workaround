@@ -13,4 +13,4 @@ RUN /opt/venv/bin/pip install -r requirements.txt
 
 # Run the application:
 COPY run.py .
-CMD ["/opt/venv/bin/gunicorn", "run:app", '--bind', "0.0.0.0:5000", '--timeout',  '900']
+CMD ["gunicorn", "run:app", '--bind', "0.0.0.0:5000", '--timeout',  '900']
