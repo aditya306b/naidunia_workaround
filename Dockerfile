@@ -5,7 +5,12 @@ COPY . .
 
 
 EXPOSE 5000
-RUN python -m venv news_venv
-RUN source news_venv/bin/activate
-RUN pip install -r ./requirements.txt
-CMD ["gunicorn", "run:app", '--bind', "0.0.0.0:5000", '--timeout',  '900']
+RUN python -m venv /opt/venv
+
+# Install dependencies:
+COPY requirements.txt .
+RUN /opt/venv/bin/pip install -r requirements.txt
+
+# Run the application:
+COPY run.py .
+CMD ["/opt/venv/bin/gunicorn", "run:app", '--bind', "0.0.0.0:5000", '--timeout',  '900']
