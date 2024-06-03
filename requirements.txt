@@ -4,3 +4,4 @@ bs4
 pillow
 reportlab
 gevent
+gunicorn
