@@ -7,10 +7,11 @@ from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 from gevent.pywsgi import WSGIServer
 import logging as log
+import json
 
 app = Flask(__name__)
 
-TIMEOUT = 540  # seconds
+TIMEOUT = 1800  # seconds
 
 def download_image(url, filename, timeout=TIMEOUT):
     """Downloads an image from the specified URL and saves it with the given filename."""
@@ -59,13 +60,15 @@ def convert_images_to_pdf(image_paths, pdf_path):
     try:
         c = canvas.Canvas(pdf_path, pagesize=letter)
         for image_path in image_paths:
-            img_width, img_height = 1671 , 2730
+            print(image_path)
+            img_width, img_height = 1671, 2730
             c.setPageSize((img_width, img_height))
             c.drawImage(image_path, 0, 0, img_width, img_height)
             c.showPage()
             os.remove(image_path)
-
+            print("reached 1 1")
         c.save()
+        print("reched 1 1")
         return True
     except Exception as err:
         raise err
@@ -93,9 +96,12 @@ def submit():
     try:
         output_dir = 'scraped_images'
         all_path = scrape_images(output_dir, date, month.lower(), city_id)
+        print("reached 1")
         res = convert_images_to_pdf(all_path, "output/output.pdf") if all_path else False
+        print("reached 2")
+        print(res)
         if res:
-            return jsonify(response)
+            return json.dumps(response)
         else:
             raise Exception("Unable to extract")
     except FileNotFoundError:

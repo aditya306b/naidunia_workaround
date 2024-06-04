@@ -25,14 +25,16 @@ document.getElementById('eventForm').addEventListener('submit', function(event) 
     })
     .then(response => {
         console.log(response);
-        response.json()})
+        return response.json();
+    })
     .then(data => {
         console.log(data, typeof data);
         document.getElementById('output').textContent = data.message;
-        loader.style.display="none";
+        loader.style.display = "none";
     })
     .catch(error => {
-        loader.style.display="none";
-        alert("Unable to extract !")
-        console.error('Error:', error)});
+        loader.style.display = "none";
+        alert("Unable to extract!");
+        console.error('Error:', error);
+    });
 });
